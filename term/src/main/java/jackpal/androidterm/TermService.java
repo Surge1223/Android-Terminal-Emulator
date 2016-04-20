@@ -16,7 +16,9 @@
 
 package jackpal.androidterm;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -30,7 +32,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.app.Notification;
 import android.app.PendingIntent;
-
+import android.support.v4.app.NotificationCompat;
 import jackpal.androidterm.emulatorview.TermSession;
 
 import jackpal.androidterm.compat.ServiceForegroundCompat;
@@ -44,6 +46,8 @@ public class TermService extends Service implements TermSession.FinishCallback
 {
     /* Parallels the value of START_STICKY on API Level >= 5 */
     private static final int COMPAT_START_STICKY = 1;
+    private static final String KEY_TEXT_REPLY = "key_text_reply";
+
 
     private static final int RUNNING_NOTIFICATION = 1;
     private ServiceForegroundCompat compat;
@@ -94,14 +98,19 @@ public class TermService extends Service implements TermSession.FinishCallback
         mTermSessions = new SessionList();
 
         /* Put the service in the foreground. */
-        Notification notification = new Notification(R.drawable.ic_stat_service_notification_icon, getText(R.string.service_notify_text), System.currentTimeMillis());
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+      //  notification.flags |= Notification.FLAG_ONGOING_EVENT;
         Intent notifyIntent = new Intent(this, Term.class);
         notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
-        notification.setLatestEventInfo(this, getText(R.string.application_terminal), getText(R.string.service_notify_text), pendingIntent);
-        compat.startForeground(RUNNING_NOTIFICATION, notification);
-
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_stat_service_notification_icon);
+        builder.setWhen(System.currentTimeMillis());
+        Notification simpleNotice = builder.setContentText(getString(R.string.service_notify_text)).setContentText(getString(R.string.service_notify_text)).setSmallIcon(R.drawable.ic_stat_service_notification_icon).setContentIntent(pendingIntent)
+                .setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL).setPriority(Notification.PRIORITY_HIGH)
+                .build();
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, simpleNotice);
         Log.d(TermDebug.LOG_TAG, "TermService started");
         return;
     }

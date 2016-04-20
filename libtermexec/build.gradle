@@ -13,18 +13,19 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion '24.0.0 rc2'
+
 
     defaultConfig {
         minSdkVersion 4
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
 
         ndk {
             moduleName 'libjackpal-termexec2'
-            abiFilters 'all'
+            abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a'
             ldLibs 'log', 'c'
         }
     }
@@ -55,5 +56,5 @@ android.libraryVariants.all { variant ->
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.android.support:support-annotations:21.0.0'
+    compile 'com.android.support:support-annotations:23.0.0'
 }

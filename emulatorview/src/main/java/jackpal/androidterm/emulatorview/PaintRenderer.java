@@ -23,23 +23,29 @@ import android.util.FloatMath;
 
 
 class PaintRenderer extends BaseTextRenderer {
+    int value;
+    public float ceil(float value) {
+        return (int)((float)Math.ceil(value));
+
+    }
     public PaintRenderer(int fontSize, ColorScheme scheme) {
         super(scheme);
+        float ceil;
+        //  mFloatceil = (int)((float)Math.ceil(value));
         mTextPaint = new Paint();
         mTextPaint.setTypeface(Typeface.MONOSPACE);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextSize(fontSize);
-
-        mCharHeight = (int) FloatMath.ceil(mTextPaint.getFontSpacing());
-        mCharAscent = (int) FloatMath.ceil(mTextPaint.ascent());
+        mCharHeight = (int)((float)Math.ceil(mTextPaint.getFontSpacing()));
+        mCharAscent = (int)((float)Math.ceil(mTextPaint.ascent()));
         mCharDescent = mCharHeight + mCharAscent;
         mCharWidth = mTextPaint.measureText(EXAMPLE_CHAR, 0, 1);
     }
 
     public void drawTextRun(Canvas canvas, float x, float y, int lineOffset,
-            int runWidth, char[] text, int index, int count,
-            boolean selectionStyle, int textStyle,
-            int cursorOffset, int cursorIndex, int cursorIncr, int cursorWidth, int cursorMode) {
+                            int runWidth, char[] text, int index, int count,
+                            boolean selectionStyle, int textStyle,
+                            int cursorOffset, int cursorIndex, int cursorIncr, int cursorWidth, int cursorMode) {
         int foreColor = TextStyle.decodeForeColor(textStyle);
         int backColor = TextStyle.decodeBackColor(textStyle);
         int effect = TextStyle.decodeEffect(textStyle);

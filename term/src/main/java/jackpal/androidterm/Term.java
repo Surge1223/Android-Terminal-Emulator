@@ -75,6 +75,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.ActivityOptions;
+import android.graphics.Rect;
 
 /**
  * A terminal emulator activity.

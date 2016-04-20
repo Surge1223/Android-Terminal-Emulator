@@ -19,17 +19,17 @@ public class TextIcon
     int     nLines=  lines.length;
     Rect    R=       new Rect();
     Paint   p=       new Paint(Paint.ANTI_ALIAS_FLAG);
-            p.       setShadowLayer(2, 10, 10, 0xFF000000);
-            p.       setColor(color);
-            p.       setSubpixelText(true);
-            p.       setTextSize(256);
-            p.       setTextAlign(Align.CENTER);
+    p.       setShadowLayer(2, 10, 10, 0xFF000000);
+    p.       setColor(color);
+    p.       setSubpixelText(true);
+    p.       setTextSize(256);
+    p.       setTextAlign(Align.CENTER);
     float   HH[]=    new float[nLines];
     float   H=       0f;
     float   W=       0f;
     for(int i=0; i<nLines; ++i)
     {
-            p.       getTextBounds(lines[i], 0, lines[i].length(), R);
+      p.       getTextBounds(lines[i], 0, lines[i].length(), R);
       float h=       Float.valueOf(Math.abs(R.top-R.bottom));
       float w=       Float.valueOf(Math.abs(R.right-R.left));
       if(nLines>1)   h+=0.1f*h; // Add space between lines.
@@ -40,11 +40,12 @@ public class TextIcon
     float   f=       ((float)width)*H/((float)height);
     int     hBitmap= (int)H;
     int     wBitmap= (int)W;
-    if(W<f) {wBitmap=(int)FloatMath.ceil(f); hBitmap=(int)FloatMath.ceil(H);}
-    else    {wBitmap=(int)FloatMath.ceil(W); hBitmap=(int)FloatMath.ceil(height*wBitmap/width);}
+    if(W<f) {wBitmap=(int)((float)Math.ceil(f)); hBitmap=(int)((float)Math.ceil(H));}
+    else    {wBitmap=(int)((float)Math.ceil(W)); hBitmap=(int)((float)Math.ceil(height*wBitmap/width));}
+
 
     Bitmap  b=       Bitmap.createBitmap(wBitmap, hBitmap, Config.ARGB_8888);
-            b.       setDensity(Bitmap.DENSITY_NONE);
+    b.       setDensity(Bitmap.DENSITY_NONE);
     Canvas  c=       new Canvas(b);
 
     W=wBitmap/2f;
@@ -56,12 +57,12 @@ public class TextIcon
       top+= HH[i]/2f;
     }
     return(
-      Bitmap.createScaledBitmap(
-        b
-      , width
-      , height
-      , true
-      )
+            Bitmap.createScaledBitmap(
+                    b
+                    , width
+                    , height
+                    , true
+            )
     );
   }
   ////////////////////////////////////////////////////////////

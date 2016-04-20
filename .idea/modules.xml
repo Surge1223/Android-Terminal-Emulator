@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android-Terminal-Emulator.iml" filepath="$PROJECT_DIR$/Android-Terminal-Emulator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android-Terminal-Emulator-mas2.iml" filepath="$PROJECT_DIR$/Android-Terminal-Emulator-mas2.iml" />
       <module fileurl="file://$PROJECT_DIR$/emulatorview/emulatorview.iml" filepath="$PROJECT_DIR$/emulatorview/emulatorview.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/intents/intents.iml" filepath="$PROJECT_DIR$/samples/intents/intents.iml" />
       <module fileurl="file://$PROJECT_DIR$/libtermexec/libtermexec.iml" filepath="$PROJECT_DIR$/libtermexec/libtermexec.iml" />
@@ -13,4 +13,3 @@
     </modules>
   </component>
 </project>
-
