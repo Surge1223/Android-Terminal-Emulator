@@ -91,7 +91,7 @@ public class TermSettings {
     public static final int RED                 = 0xffff0113;
     public static final int HOLO_BLUE           = 0xff33b5e5;
     public static final int SOLARIZED_FG        = 0xffffffff;
-    public static final int SOLARIZED_BG        = 0xFF0E5070;
+    public static final int SOLARIZED_BG        = R.color.solar_drk_blue;
     public static final int SOLARIZED_DARK_FG   = 0xffffffff;
     public static final int SOLARIZED_DARK_BG   = 0xff002b36;
     public static final int LINUX_CONSOLE_WHITE = 0xffaaaaaa;
