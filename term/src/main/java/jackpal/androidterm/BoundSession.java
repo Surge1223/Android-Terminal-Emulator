@@ -4,7 +4,7 @@ import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import jackpal.androidterm.util.TermSettings;
 
-class BoundSession extends GenericTermSession {
+public class BoundSession extends GenericTermSession {
     private final String issuerTitle;
 
     private boolean fullyInitialized;

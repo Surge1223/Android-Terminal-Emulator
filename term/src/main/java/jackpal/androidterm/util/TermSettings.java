@@ -43,6 +43,7 @@ public class TermSettings {
     private int mUseCookedIME;
     private String mShell;
     private String mFailsafeShell;
+    private String mInitialCommanddef;
     private String mInitialCommand;
     private String mTermType;
     private boolean mCloseOnExit;
@@ -89,9 +90,9 @@ public class TermSettings {
     public static final int AMBER               = 0xffffb651;
     public static final int RED                 = 0xffff0113;
     public static final int HOLO_BLUE           = 0xff33b5e5;
-    public static final int SOLARIZED_FG        = 0xff657b83;
-    public static final int SOLARIZED_BG        = 0xfffdf6e3;
-    public static final int SOLARIZED_DARK_FG   = 0xff839496;
+    public static final int SOLARIZED_FG        = 0xffffffff;
+    public static final int SOLARIZED_BG        = 0xFF0E5070;
+    public static final int SOLARIZED_DARK_FG   = 0xffffffff;
     public static final int SOLARIZED_DARK_BG   = 0xff002b36;
     public static final int LINUX_CONSOLE_WHITE = 0xffaaaaaa;
 
@@ -172,7 +173,8 @@ public class TermSettings {
         mUseCookedIME = Integer.parseInt(res.getString(R.string.pref_ime_default));
         mFailsafeShell = res.getString(R.string.pref_shell_default);
         mShell = mFailsafeShell;
-        mInitialCommand = res.getString(R.string.pref_initialcommand_default);
+        mInitialCommanddef = res.getString(R.string.pref_initialcommand_default);
+        mInitialCommand =  res.getString(R.string.pref_initialcommand_default);
         mTermType = res.getString(R.string.pref_termtype_default);
         mCloseOnExit = res.getBoolean(R.bool.pref_close_window_on_process_exit_default);
         mVerifyPath = res.getBoolean(R.bool.pref_verify_path_default);

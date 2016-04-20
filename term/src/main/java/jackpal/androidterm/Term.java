@@ -95,8 +95,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
     private SessionList mTermSessions;
 
+   // private SharedPreferences mPrefs;
     private TermSettings mSettings;
-
     private final static int SELECT_TEXT_ID = 0;
     private final static int COPY_ALL_ID = 1;
     private final static int PASTE_ID = 2;
@@ -468,6 +468,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             // Not needed
             return;
         }
+
         if (mTermSessions != null) {
             int position = mViewFlipper.getDisplayedChild();
             if (mWinListAdapter == null) {
@@ -600,12 +601,71 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             /* Shouldn't be happened. */
         }
         setRequestedOrientation(o);
+ /*   }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SessionList sessions = mTermSessions;
+        TermViewFlipper viewFlipper = mViewFlipper;
+        if (sessions != null) {
+            sessions.addCallback(this);
+            WindowListAdapter adapter = mWinListAdapter;
+            if (adapter != null) {
+                sessions.addCallback(adapter);
+                sessions.addTitleChangedListener(adapter);
+                viewFlipper.addCallback(adapter);
+            }
+        }
+        if (sessions != null && sessions.size() < viewFlipper.getChildCount()) {
+            for (int i = 0; i < viewFlipper.getChildCount(); ++i) {
+                EmulatorView v = (EmulatorView) viewFlipper.getChildAt(i);
+                if (!sessions.contains(v.getTermSession())) {
+                    v.onPause();
+                    viewFlipper.removeView(v);
+                    --i;
+                }
+            }
+        }
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // the HOME dir needs to be set here since it comes from Context
+        SharedPreferences.Editor editor = mPrefs.edit();
+        String defValue = getDir("HOME", MODE_PRIVATE).getAbsolutePath();
+        String homePath = mPrefs.getString("home_path", defValue);
+        editor.putString("home_path", homePath);
+        editor.commit();
+
+        mSettings.readPrefs(mPrefs);
+        updatePrefs();
+
+        if (onResumeSelectWindow >= 0) {
+            viewFlipper.setDisplayedChild(onResumeSelectWindow);
+            onResumeSelectWindow = -1;
+        }
+        viewFlipper.onResume();
+*/
     }
 
     @Override
     public void onPause() {
         super.onPause();
+/*
+        SessionList sessions = mTermSessions;
+        TermViewFlipper viewFlipper = mViewFlipper;
 
+        viewFlipper.onPause();
+        if (sessions != null) {
+            sessions.removeCallback(this);
+            WindowListAdapter adapter = mWinListAdapter;
+            if (adapter != null) {
+                sessions.removeCallback(adapter);
+                sessions.removeTitleChangedListener(adapter);
+                viewFlipper.removeCallback(adapter);
+            }
+        }
+*/
         if (AndroidCompat.SDK < 5) {
             /* If we lose focus between a back key down and a back key up,
                we shouldn't respond to the next back key up event unless
@@ -848,7 +908,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
       menu.setHeaderTitle(R.string.edit_text);
       menu.add(0, SELECT_TEXT_ID, 0, R.string.select_text);
       menu.add(0, COPY_ALL_ID, 0, R.string.copy_all);
-      menu.add(0, PASTE_ID, 0, R.string.paste);
+      menu.add(0, PASTE_ID, 0,  R.string.paste);
       menu.add(0, SEND_CONTROL_KEY_ID, 0, R.string.send_control_key);
       menu.add(0, SEND_FN_KEY_ID, 0, R.string.send_fn_key);
       if (!canPaste()) {

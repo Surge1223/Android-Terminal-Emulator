@@ -20,6 +20,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -233,4 +234,15 @@ class GenericTermSession extends TermSession {
             }
         }
     }
+
+    private static native int createSubprocessInternal(String cmd,
+                                                       String[] args, String[] envVars, int masterFd);
+
+// prevents runtime errors on old API versions with ruthless verifier
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+public static class FdHelperHoneycomb {
+    public static int getFd(ParcelFileDescriptor descriptor) {
+        return descriptor.getFd();
+    }
+}
 }
