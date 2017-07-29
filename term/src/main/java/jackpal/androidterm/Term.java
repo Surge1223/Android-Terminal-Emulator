@@ -16,6 +16,7 @@
 
 package jackpal.androidterm;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import jackpal.androidterm.compat.ActionBarCompat;
 import jackpal.androidterm.compat.ActivityCompat;
@@ -30,6 +31,7 @@ import jackpal.androidterm.emulatorview.compat.KeycodeConstants;
 import jackpal.androidterm.util.SessionList;
 import jackpal.androidterm.util.TermSettings;
 
+import jackpal.androidterm.activitybounds;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.Arrays;
@@ -95,8 +97,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
     private SessionList mTermSessions;
 
-   // private SharedPreferences mPrefs;
+    private SharedPreferences mPrefs;
     private TermSettings mSettings;
+
     private final static int SELECT_TEXT_ID = 0;
     private final static int COPY_ALL_ID = 1;
     private final static int PASTE_ID = 2;
@@ -180,9 +183,10 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         }
 
         @Override
+        @SuppressLint("StringFormatInvalid")
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView label = new TextView(Term.this);
-            String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
+             String title = getSessionTitle(position, getString(R.string.window_title, position + 1));
             label.setText(title);
             if (AndroidCompat.SDK >= 13) {
                 label.setTextAppearance(Term.this, TextAppearance_Holo_Widget_ActionBar_Title);
@@ -378,7 +382,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TermDebug.LOG_TAG);
-        WifiManager wm = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int wifiLockMode = WifiManager.WIFI_MODE_FULL;
         if (AndroidCompat.SDK >= 12) {
             wifiLockMode = WIFI_MODE_FULL_HIGH_PERF;
@@ -431,10 +435,10 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             throw new IllegalStateException("Failed to bind to TermService!");
         }
     }
-
     private void populateViewFlipper() {
         if (mTermService != null) {
             mTermSessions = mTermService.getSessions();
+
 
             if (mTermSessions.size() == 0) {
                 try {
@@ -447,7 +451,6 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             }
 
             mTermSessions.addCallback(this);
-
             for (TermSession session : mTermSessions) {
                 EmulatorView view = createEmulatorView(session);
                 mViewFlipper.addView(view);
@@ -459,6 +462,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 mViewFlipper.setDisplayedChild(onResumeSelectWindow);
                 onResumeSelectWindow = -1;
             }
+
             mViewFlipper.onResume();
         }
     }
@@ -479,7 +483,6 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 mWinListAdapter.setSessions(mTermSessions);
             }
             mViewFlipper.addCallback(mWinListAdapter);
-
             mActionBar.setSelectedNavigationItem(position);
         }
     }
@@ -487,10 +490,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
-
         if (mStopServiceOnFinish) {
             stopService(TSIntent);
         }
@@ -601,7 +602,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             /* Shouldn't be happened. */
         }
         setRequestedOrientation(o);
- /*   }
+    }
 
     @Override
     public void onResume() {
@@ -645,13 +646,14 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             onResumeSelectWindow = -1;
         }
         viewFlipper.onResume();
-*/
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-/*
+
+
         SessionList sessions = mTermSessions;
         TermViewFlipper viewFlipper = mViewFlipper;
 
@@ -665,7 +667,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 viewFlipper.removeCallback(adapter);
             }
         }
-*/
+
+
         if (AndroidCompat.SDK < 5) {
             /* If we lose focus between a back key down and a back key up,
                we shouldn't respond to the next back key up event unless
@@ -705,7 +708,6 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         super.onStop();
     }
-
     private boolean checkHaveFullHwKeyboard(Configuration c) {
         return (c.keyboard == Configuration.KEYBOARD_QWERTY) &&
             (c.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO);
@@ -781,6 +783,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         }
 
         try {
+            Rect bounds = new Rect(500, 300, 100, 0);
             TermSession session = createTermSession();
 
             mTermSessions.add(session);
@@ -1021,10 +1024,11 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private boolean canPaste() {
         ClipboardManagerCompat clip = ClipboardManagerCompatFactory
                 .getManager(getApplicationContext());
+        CharSequence paste = clip.getText();
         if (clip.hasText()) {
             return true;
         }
-        return false;
+        return true;
     }
 
     private void doPreferences() {

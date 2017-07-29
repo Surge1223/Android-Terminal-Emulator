@@ -65,7 +65,6 @@
    <string name="title_cursorstyle_preference">Cursor style</string>
    <string name="summary_cursorstyle_preference">Choose cursor style.</string>
    <string name="dialog_title_cursorstyle_preference">Cursor style</string>
-
    <string name="title_cursorblink_preference">Cursor blink</string>
    <string name="summary_cursorblink_preference">Choose cursor blink.</string>
    <string name="dialog_title_cursorblink_preference">Cursor blink</string>

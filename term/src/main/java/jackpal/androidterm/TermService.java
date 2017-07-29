@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 
 package jackpal.androidterm;
 
+import android.app.ActivityOptions;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.*;
 import android.content.Intent;
@@ -32,6 +34,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.app.Notification;
 import android.app.PendingIntent;
+
 import android.support.v4.app.NotificationCompat;
 import jackpal.androidterm.emulatorview.TermSession;
 
@@ -47,7 +50,6 @@ public class TermService extends Service implements TermSession.FinishCallback
     /* Parallels the value of START_STICKY on API Level >= 5 */
     private static final int COMPAT_START_STICKY = 1;
     private static final String KEY_TEXT_REPLY = "key_text_reply";
-
 
     private static final int RUNNING_NOTIFICATION = 1;
     private ServiceForegroundCompat compat;
@@ -67,8 +69,9 @@ public class TermService extends Service implements TermSession.FinishCallback
     }
 
     /* This should be @Override if building with API Level >=5 */
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return COMPAT_START_STICKY;
+        return START_STICKY_COMPATIBILITY;
     }
 
     @Override
@@ -93,13 +96,13 @@ public class TermService extends Service implements TermSession.FinishCallback
         String homePath = prefs.getString("home_path", defValue);
         editor.putString("home_path", homePath);
         editor.commit();
-
         compat = new ServiceForegroundCompat(this);
         mTermSessions = new SessionList();
 
         /* Put the service in the foreground. */
-      //  notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        // Define the bounds in which the Activity will be launched into.
         Intent notifyIntent = new Intent(this, Term.class);
+        notifyIntent.addFlags(NotificationCompat.FLAG_ONGOING_EVENT);
         notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -111,6 +114,7 @@ public class TermService extends Service implements TermSession.FinishCallback
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, simpleNotice);
+
         Log.d(TermDebug.LOG_TAG, "TermService started");
         return;
     }
